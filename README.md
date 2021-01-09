@@ -67,6 +67,11 @@ So that I can communicate more efficiently with the vessel crew.
 
 Assuming that Ticket-1 is implemented and released to production, please extend the `existing endpoint` with an option to return the temperature in Celsius or Fahrenheit.
 
+## **Implementation notes for Ticket-2 from Patrick Espinosa**
+- In order to test if the api is returning the temperature in both scales properly, an integration test was added where we request both temperatures for the same city, then we calculate the conversion from one scale to the other and if both values are the same this means that both temperatures are in the right scale.
+- Some refactoring could be done in the WeatherControllerTests in order to avoid code duplication, but it is still manegeable at this point, ast there are only 2 tests.
+    
+
 ## Ticket-3
 
 As an operator,  
