@@ -7,6 +7,12 @@ namespace WeatherApi.Services
 {
     public class WeatherService : IWeatherService
     {
+        public enum TemperatureScale
+        {
+            Celsius,
+            Fahrenheit
+        }
+
         private readonly WeatherApiDotComClient _weatherApiDotComClient;
 
         public WeatherService(WeatherApiDotComClient weatherApiDotComClient)
@@ -14,7 +20,7 @@ namespace WeatherApi.Services
             _weatherApiDotComClient = weatherApiDotComClient;
         }
 
-        public async Task<CurrentWeather> GetCurrentWeather(string city)
+        public async Task<CurrentWeather> GetCurrentWeather(string city, int temperatureScale)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/current.json?q={city}");
             var httpResponse = await _weatherApiDotComClient.Client.SendAsync(request);
@@ -38,7 +44,9 @@ namespace WeatherApi.Services
                 Region = currentWeatherResponse.Location.Region,
                 Country = currentWeatherResponse.Location.Country,
                 LocalTime = currentWeatherResponse.Location.Localtime,
-                Temperature = currentWeatherResponse.Current.Temperature
+                Temperature = temperatureScale == (int)TemperatureScale.Fahrenheit
+                    ? currentWeatherResponse.Current.TemperatureInFahrenheit
+                    : currentWeatherResponse.Current.TemperatureInCelsius
             };
 
             return currentWeather;

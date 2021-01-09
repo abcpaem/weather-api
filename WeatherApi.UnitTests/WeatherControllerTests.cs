@@ -9,16 +9,18 @@ namespace WeatherApi.UnitTests
 {
     public class WeatherControllerTests
     {
+        const int CelsiusScale = (int)WeatherService.TemperatureScale.Celsius;
+
         [Fact]
         public void Get_WhenCalledWithValidCity_ReturnsOk()
         {
             var mockWeatherService = new Mock<IWeatherService>();
-            mockWeatherService.Setup(s => s.GetCurrentWeather(It.IsAny<string>())).ReturnsAsync(new CurrentWeather());
+            mockWeatherService.Setup(s => s.GetCurrentWeather(It.IsAny<string>(), CelsiusScale)).ReturnsAsync(new CurrentWeather());
             var weatherController = new WeatherController(mockWeatherService.Object);
 
-            var result = weatherController.Get(It.IsAny<string>());
+            var result = weatherController.Get(It.IsAny<string>(), CelsiusScale);
 
-            mockWeatherService.Verify(x => x.GetCurrentWeather(It.IsAny<string>()), Times.Once);
+            mockWeatherService.Verify(x => x.GetCurrentWeather(It.IsAny<string>(), 0), Times.Once);
             Assert.IsType<OkObjectResult>(result.Result);
         }
 
@@ -26,12 +28,12 @@ namespace WeatherApi.UnitTests
         public void Get_WhenCalledWithInValidCity_ReturnsNotFound()
         {
             var mockWeatherService = new Mock<IWeatherService>();
-            mockWeatherService.Setup(s => s.GetCurrentWeather(It.IsAny<string>())).ReturnsAsync((CurrentWeather)null);
+            mockWeatherService.Setup(s => s.GetCurrentWeather(It.IsAny<string>(), CelsiusScale)).ReturnsAsync((CurrentWeather)null);
             var weatherController = new WeatherController(mockWeatherService.Object);
 
-            var result = weatherController.Get(It.IsAny<string>());
+            var result = weatherController.Get(It.IsAny<string>(), CelsiusScale);
 
-            mockWeatherService.Verify(x => x.GetCurrentWeather(It.IsAny<string>()), Times.Once);
+            mockWeatherService.Verify(x => x.GetCurrentWeather(It.IsAny<string>(), CelsiusScale), Times.Once);
             Assert.IsType<NotFoundResult>(result.Result);
         }
     }

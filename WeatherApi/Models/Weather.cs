@@ -31,8 +31,10 @@ namespace WeatherApi.Models
 
     public class Current
     {
-        // Temperature in Celsius
         [JsonPropertyName("temp_c")]
-        public decimal Temperature { get; set; }
+        public decimal TemperatureInCelsius { get; set; }
+
+        [JsonPropertyName("temp_f")]
+        public decimal TemperatureInFahrenheit { get; set; }
     }
 }

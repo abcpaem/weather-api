@@ -24,6 +24,11 @@ namespace WeatherApi.Controllers
         /// The temperature provided is on the Celsius scale (°C) or also known as centigrade scale.
         /// </remarks>
         /// <param name="city">The city to get the weather for.</param>
+        /// <param name="temperatureScale">Specifies the temperature scale to use: (optional parameter)
+        /// 
+        /// 0 - Celsius (default value if not provided)
+        /// 1 - Fahrenheit
+        /// </param>
         /// <response code="200">Response when the current weather conditions are retrieved successfully.</response>
         /// <response code="404">Response when no weather data is found for the city provided.</response>
         /// <response code="500">Response when something has gone wrong in the weather request.</response>
@@ -31,9 +36,9 @@ namespace WeatherApi.Controllers
         [ProducesResponseType(typeof(CurrentWeather), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get([FromRoute] string city)
+        public async Task<IActionResult> Get([FromRoute] string city, [FromQuery] int temperatureScale)
         {
-            var currentWeather = await _weatherService.GetCurrentWeather(city);
+            var currentWeather = await _weatherService.GetCurrentWeather(city, temperatureScale);
 
             if (currentWeather == null)
             {

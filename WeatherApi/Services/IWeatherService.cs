@@ -5,6 +5,6 @@ namespace WeatherApi.Services
 {
     public interface IWeatherService
     {
-        Task<CurrentWeather> GetCurrentWeather(string city);
+        Task<CurrentWeather> GetCurrentWeather(string city, int temperatureScale);
     }
 }
