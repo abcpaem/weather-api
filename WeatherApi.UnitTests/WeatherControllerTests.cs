@@ -20,7 +20,7 @@ namespace WeatherApi.UnitTests
 
             var result = weatherController.Get(It.IsAny<string>(), CelsiusScale);
 
-            mockWeatherService.Verify(x => x.GetCurrentWeather(It.IsAny<string>(), 0), Times.Once);
+            mockWeatherService.Verify(x => x.GetCurrentWeather(It.IsAny<string>(), CelsiusScale), Times.Once);
             Assert.IsType<OkObjectResult>(result.Result);
         }
 
