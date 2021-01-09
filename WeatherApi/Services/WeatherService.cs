@@ -36,6 +36,7 @@ namespace WeatherApi.Services
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
             var currentWeatherResponse = await JsonSerializer.DeserializeAsync<CurrentWeatherResponse>(content, options);
+            var astronomyResponse = await GetAstronomy(city);
 
             // TODO: Use AutoMapper
             var currentWeather = new CurrentWeather
@@ -46,10 +47,31 @@ namespace WeatherApi.Services
                 LocalTime = currentWeatherResponse.Location.Localtime,
                 Temperature = temperatureScale == (int)TemperatureScale.Fahrenheit
                     ? currentWeatherResponse.Current.TemperatureInFahrenheit
-                    : currentWeatherResponse.Current.TemperatureInCelsius
+                    : currentWeatherResponse.Current.TemperatureInCelsius,
+                SunRise = astronomyResponse.Astronomy.Astro.Sunrise,
+                SunSet = astronomyResponse.Astronomy.Astro.Sunset
             };
 
             return currentWeather;
+        }
+
+        private async Task<AstronomyResponse> GetAstronomy(string city)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/astronomy.json?q={city}");
+            var httpResponse = await _weatherApiDotComClient.Client.SendAsync(request);
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                return new AstronomyResponse { Astronomy = new Astronomy { Astro = new Astro() } };
+            }
+
+            var content = await httpResponse.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+            return await JsonSerializer.DeserializeAsync<AstronomyResponse>(content, options);
         }
     }
 }

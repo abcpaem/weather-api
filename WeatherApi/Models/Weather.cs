@@ -13,6 +13,10 @@ namespace WeatherApi.Models
         public string LocalTime { get; set; }
 
         public decimal Temperature { get; set; }
+
+        public string SunRise { get; set; }
+
+        public string SunSet { get; set; }
     }
 
     public class CurrentWeatherResponse
@@ -36,5 +40,21 @@ namespace WeatherApi.Models
 
         [JsonPropertyName("temp_f")]
         public decimal TemperatureInFahrenheit { get; set; }
+    }
+
+    public class AstronomyResponse
+    {
+        public Astronomy Astronomy { get; set; }
+    }
+
+    public class Astronomy
+    {
+        public Astro Astro { get; set; }
+    }
+
+    public class Astro
+    {
+        public string Sunrise { get; set; }
+        public string Sunset { get; set; }
     }
 }

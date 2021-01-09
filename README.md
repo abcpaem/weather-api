@@ -80,6 +80,12 @@ So that I can better plan and coordinate the operations on the vessel.
 
 Assuming previous changes are implemented and released to production, please extend the `existing endpoint` with information of sunrise and sunset using the http://api.weatherapi.com/v1/astronomy.json api call.
 
+## **Implementation notes for Ticket-3 from Patrick Espinosa**
+- During testing I just realised that there are many cities with duplicated names in the world, for example Guadalajara, there is one in México and other in Spain, the api always returns weather data for the city in Mexico, so as a user there is no way for me to know the weather conditions of Guadalajara in Spain. This would be something to think about for a future requirement. As you just noticed, when I'm developing and testing I see things that others cannot see or imagine, hehe :P
+- I made private the method for getting the astronomy for now because this is only used internally by the WeatherService.
+- This requirement adds 2 more properties to the currentWeather object, but we are still mapping values to the same object, so no need to use AutoMapper yet.
+
+
 ## Ticket-4 (optional to verify the front-end skills)
 
 As a operator,

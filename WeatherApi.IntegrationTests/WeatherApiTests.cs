@@ -32,6 +32,8 @@ namespace WeatherApi.IntegrationTests
             Assert.NotNull(currentWeather.Region);
             Assert.NotNull(currentWeather.Country);
             Assert.NotNull(currentWeather.LocalTime);
+            Assert.NotNull(currentWeather.SunRise);
+            Assert.NotNull(currentWeather.SunSet);
             Assert.Equal(HttpStatusCode.OK, response.Result.StatusCode);
         }
 
