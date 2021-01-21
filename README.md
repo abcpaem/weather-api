@@ -1,4 +1,7 @@
-## **Note from** Patrick Espinosa **for Code Reviewers:** Please read my implementation notes below, after every Ticket section.
+## **Note for Code Reviewers** from Patrick Espinosa : 
+## Please read my implementation notes below, after every Ticket section.
+
+You can use Swagger to see the api documentation, just run the api and then go to https://localhost:5001/swagger
 
 # The Insurwave code test
 

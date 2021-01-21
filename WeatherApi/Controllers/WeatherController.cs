@@ -21,7 +21,7 @@ namespace WeatherApi.Controllers
         /// Gets the current weather conditions for the city specified.
         /// </summary>
         /// <remarks>
-        /// The temperature provided is on the Celsius scale (°C) or also known as centigrade scale.
+        /// You can choose the scale for the temperature returned between the Celsius scale (°C) or the Fahrenheit scale. You can also see sunrise and sunset informantion for the city specified.
         /// </remarks>
         /// <param name="city">The city to get the weather for.</param>
         /// <param name="temperatureScale">Specifies the temperature scale to use: (optional parameter)
