@@ -1,11 +1,13 @@
 using System;
 using System.IO;
+using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Polly;
 using WeatherApi.Models;
 using WeatherApi.Services;
 
@@ -36,8 +38,13 @@ namespace WeatherApi
             });
 
             services.AddScoped<IWeatherService, WeatherService>();
-            
-            services.AddHttpClient<WeatherApiDotComClient>();
+
+            // Configuring Circuit Breaker
+            var basicCircuitBreakerPolicy = Policy
+                .HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+                .CircuitBreakerAsync(2, TimeSpan.FromSeconds(30));
+
+            services.AddHttpClient<WeatherApiDotComClient>().AddPolicyHandler(basicCircuitBreakerPolicy);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
