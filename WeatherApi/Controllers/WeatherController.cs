@@ -36,6 +36,7 @@ namespace WeatherApi.Controllers
         [ProducesResponseType(typeof(CurrentWeather), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any, VaryByQueryKeys = new[] { "temperatureScale" })]
         public async Task<IActionResult> Get([FromRoute] string city, [FromQuery] int temperatureScale)
         {
             var currentWeather = await _weatherService.GetCurrentWeather(city, temperatureScale);
