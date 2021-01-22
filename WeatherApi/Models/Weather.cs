@@ -2,6 +2,12 @@ using System.Text.Json.Serialization;
 
 namespace WeatherApi.Models
 {
+    public enum TemperatureScale
+    {
+        Celsius,
+        Fahrenheit
+    }
+
     public class CurrentWeather
     {
         public string City { get; set; }
@@ -17,6 +23,13 @@ namespace WeatherApi.Models
         public string SunRise { get; set; }
 
         public string SunSet { get; set; }
+    }
+
+    public class CurrentWeatherDTO
+    {
+        public CurrentWeatherResponse CurrentWeatherResponse { get; set; }
+        public AstronomyResponse AstronomyResponse { get; set; }
+        public int TemperatureScale { get; set; }
     }
 
     public class CurrentWeatherResponse

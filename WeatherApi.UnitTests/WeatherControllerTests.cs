@@ -9,7 +9,7 @@ namespace WeatherApi.UnitTests
 {
     public class WeatherControllerTests
     {
-        const int CelsiusScale = (int)WeatherService.TemperatureScale.Celsius;
+        const int CelsiusScale = (int)TemperatureScale.Celsius;
 
         [Fact]
         public void Get_WhenCalledWithValidCity_ReturnsOk()

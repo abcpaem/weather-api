@@ -3,7 +3,6 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using WeatherApi.Models;
-using WeatherApi.Services;
 using Xunit;
 
 namespace WeatherApi.IntegrationTests
@@ -56,8 +55,8 @@ namespace WeatherApi.IntegrationTests
         [InlineData("Madrid")]
         public async void Get_WhenCalledWithValidCityAndScaleFarenheit_ReturnsCurrentWeather(string city)
         {
-            var requestCelsius = new HttpRequestMessage(HttpMethod.Get, $"api/weather/{city}?temperatureScale={(int)WeatherService.TemperatureScale.Celsius}");
-            var requestFahrenheit = new HttpRequestMessage(HttpMethod.Get, $"api/weather/{city}?temperatureScale={(int)WeatherService.TemperatureScale.Fahrenheit}");
+            var requestCelsius = new HttpRequestMessage(HttpMethod.Get, $"api/weather/{city}?temperatureScale={(int)TemperatureScale.Celsius}");
+            var requestFahrenheit = new HttpRequestMessage(HttpMethod.Get, $"api/weather/{city}?temperatureScale={(int)TemperatureScale.Fahrenheit}");
 
             var response = _client.SendAsync(requestCelsius);
             var currentWeatherInCelsius = JsonConvert.DeserializeObject<CurrentWeather>(await response.Result.Content.ReadAsStringAsync());

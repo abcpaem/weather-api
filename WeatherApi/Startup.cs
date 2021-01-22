@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -38,6 +40,25 @@ namespace WeatherApi
             services.AddScoped<IWeatherService, WeatherService>();
             
             services.AddHttpClient<WeatherApiDotComClient>();
+
+            services.AddSingleton(ConfiguredMapping());
+            services.AddScoped<IMapper, ServiceMapper>();
+        }
+
+        private TypeAdapterConfig ConfiguredMapping()
+        {
+            var config = new TypeAdapterConfig();
+
+            config.NewConfig<CurrentWeatherDTO, CurrentWeather>()
+                .NameMatchingStrategy(NameMatchingStrategy.IgnoreCase)
+                .Map(dest => dest.City, src => src.CurrentWeatherResponse.Location.Name)
+                .Map(dest => dest, src => src.CurrentWeatherResponse.Location)
+                .Map(dest => dest, src => src.AstronomyResponse.Astronomy.Astro)
+                .Map(dest => dest.Temperature, src => src.TemperatureScale == (int) TemperatureScale.Fahrenheit
+                    ? src.CurrentWeatherResponse.Current.TemperatureInFahrenheit
+                    : src.CurrentWeatherResponse.Current.TemperatureInCelsius);
+
+            return config;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

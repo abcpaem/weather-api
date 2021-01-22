@@ -1,23 +1,20 @@
 ﻿using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using MapsterMapper;
 using WeatherApi.Models;
 
 namespace WeatherApi.Services
 {
     public class WeatherService : IWeatherService
     {
-        public enum TemperatureScale
-        {
-            Celsius,
-            Fahrenheit
-        }
-
         private readonly WeatherApiDotComClient _weatherApiDotComClient;
+        private readonly IMapper _mapper;
 
-        public WeatherService(WeatherApiDotComClient weatherApiDotComClient)
+        public WeatherService(WeatherApiDotComClient weatherApiDotComClient, IMapper mapper)
         {
             _weatherApiDotComClient = weatherApiDotComClient;
+            _mapper = mapper;
         }
 
         public async Task<CurrentWeather> GetCurrentWeather(string city, int temperatureScale)
@@ -35,24 +32,15 @@ namespace WeatherApi.Services
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
-            var currentWeatherResponse = await JsonSerializer.DeserializeAsync<CurrentWeatherResponse>(content, options);
-            var astronomyResponse = await GetAstronomy(city);
 
-            // TODO: Use AutoMapper
-            var currentWeather = new CurrentWeather
+            var currentWeatherDto = new CurrentWeatherDTO
             {
-                City = currentWeatherResponse.Location.Name,
-                Region = currentWeatherResponse.Location.Region,
-                Country = currentWeatherResponse.Location.Country,
-                LocalTime = currentWeatherResponse.Location.Localtime,
-                Temperature = temperatureScale == (int)TemperatureScale.Fahrenheit
-                    ? currentWeatherResponse.Current.TemperatureInFahrenheit
-                    : currentWeatherResponse.Current.TemperatureInCelsius,
-                SunRise = astronomyResponse.Astronomy.Astro.Sunrise,
-                SunSet = astronomyResponse.Astronomy.Astro.Sunset
+                CurrentWeatherResponse = await JsonSerializer.DeserializeAsync<CurrentWeatherResponse>(content, options),
+                AstronomyResponse = await GetAstronomy(city),
+                TemperatureScale = temperatureScale
             };
 
-            return currentWeather;
+            return _mapper.Map<CurrentWeather>(currentWeatherDto);
         }
 
         private async Task<AstronomyResponse> GetAstronomy(string city)
