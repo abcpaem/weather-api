@@ -1,11 +1,6 @@
-## **Note for Code Reviewers** from Patrick Espinosa : 
-## Please read my implementation notes below, after every Ticket section.
+## The Weather API
 
-You can use Swagger to see the api documentation, just run the api and then go to https://localhost:5001/swagger
-
-# The Insurwave code test
-
-## Introduction
+### Introduction
 
 Let's imagine a ship operating company having vessels traveling across the globe. The operators located in one of the headquarters are responsible for communication with vessel captains during their journey.  
 To make their work easier they need to understand what is the local time at the ports where vessels stay as well as local weather conditions.
@@ -48,7 +43,7 @@ The endpoint should use http://api.weatherapi.com/v1/current.json for obtaining 
 }
 ```
 
-## **Implementation notes for Ticket-1 from Patrick Espinosa**
+## **Implementation notes for Ticket-1**
 - I left my weatherapi.com key in the appsettings file for 3 reasons: 
     1) I wanted to deliver a working solution.
     2) On the free account there is a limit of 1 million calls for month (more than enough).
@@ -70,7 +65,7 @@ So that I can communicate more efficiently with the vessel crew.
 
 Assuming that Ticket-1 is implemented and released to production, please extend the `existing endpoint` with an option to return the temperature in Celsius or Fahrenheit.
 
-## **Implementation notes for Ticket-2 from Patrick Espinosa**
+## **Implementation notes for Ticket-2**
 - In order to test if the api is returning the temperature in both scales properly, an integration test was added where we request both temperatures for the same city, then we calculate the conversion from one scale to the other and if both values are the same this means that both temperatures are in the right scale.
 - Some refactoring could be done in the WeatherControllerTests in order to avoid code duplication, but it is still manegeable at this point, ast there are only 2 tests.
     
@@ -83,7 +78,7 @@ So that I can better plan and coordinate the operations on the vessel.
 
 Assuming previous changes are implemented and released to production, please extend the `existing endpoint` with information of sunrise and sunset using the http://api.weatherapi.com/v1/astronomy.json api call.
 
-## **Implementation notes for Ticket-3 from Patrick Espinosa**
+## **Implementation notes for Ticket-3**
 - During testing I just realised that there are many cities with duplicated names in the world, for example Guadalajara, there is one in México and other in Spain, the api always returns weather data for the city in Mexico, so as a user there is no way for me to know the weather conditions of Guadalajara in Spain. This would be something to think about for a future requirement. As you just noticed, when I'm developing and testing I see things that others cannot see or imagine, hehe :P
 - I made private the method for getting the astronomy for now because this is only used internally by the WeatherService.
 - This requirement adds 2 more properties to the currentWeather object, but we are still mapping values to the same object, so no need to use AutoMapper yet.
@@ -96,3 +91,6 @@ I want to see the current weather details for typed in the city name,
 So that I can better handle the various vessel crews.
 
 As a part of this ticket, please create a simple react page which allows to display the weather details for the typed in city. Using typescript is highly appreciated.
+
+## API Documentation
+You can use Swagger to see the api documentation, just run the api and then go to https://localhost:5001/swagger
